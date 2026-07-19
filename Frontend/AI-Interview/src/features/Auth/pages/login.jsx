@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
-import { useNavigate,Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+
 export default function LoginPage() {
+  const { loading, handleLogin } = useAuth();
+  const navigate=useNavigate()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your login logic here using the 'email' and 'password' states
+    // Call the auth hook's login handler
+    await handleLogin({ email, password });
     console.log("Submitting login for:", email);
+    navigate('/')
   };
 
+  if (loading) {
+    return (<main><h1>Loading.....</h1></main>);
+  }
+
   return (
-    <div className=" font-serif min-h-screen flex flex-col items-center justify-center p-6 text-foreground relative bg-background font-sans select-none overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-foreground relative bg-background font-sans select-none overflow-hidden">
       
       {/* Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-primary rounded-full blur-[100px] pointer-events-none"></div>

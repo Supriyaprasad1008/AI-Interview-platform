@@ -1,11 +1,12 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "./features/Auth/pages/login";
 import Register from "./features/Auth/pages/register";
+import HomePage from "./features/Auth/pages/home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/login" replace />
+    element: <HomePage />
   },
   {
     path: "/login",

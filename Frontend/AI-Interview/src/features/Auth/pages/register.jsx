@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-export default function LoginPage() {
+import { Link } from 'react-router-dom';
+
+export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your login logic here using the 'email' and 'password' states
-    console.log("Submitting login for:", email);
+    // Add your register logic here using the 'email' and 'password' states
+    console.log("Submitting register for:", email);
   };
 
   return (
