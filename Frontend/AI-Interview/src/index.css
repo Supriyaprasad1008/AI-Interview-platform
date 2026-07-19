@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  /* Main Colors */
+  --color-background: #04101A;
+  --color-foreground: #FFFFFF;
+  --color-muted: #52656F;
+
+  /* Primary Button Colors */
+  --color-primary: #10B981;
+  --color-primary-foreground: #04101A;
+
+  /* Accent / Blue Details */
+  --color-accent: #60A5FA;
+  --color-accent-foreground: #FFFFFF;
+
+  /* Input Custom Colors */
+  --color-input-border: #112230;
+  --color-input-bg: #081724;
+
+  /* Shadow Glow Color */
+  --color-emerald-shadow: #10B981;
+
+  /* Custom Typography */
+  --font-sans: "Inter", "ui-sans-serif", "system-ui";
+}
