@@ -11,11 +11,12 @@ export async function register({username,email,password}){
        return response.data
     }
     catch(err){
-        console.log(err)
-
+        console.error(err)
+        const message = err?.response?.data?.message || err.message || "Registration failed";
+        throw new Error(message);
     }
-    
 }
+
 export async function login({email,password}){
     try{
        const response=await api.post("/api/auth/login",{
@@ -24,8 +25,9 @@ export async function login({email,password}){
        return response.data
     }
     catch(err){
-       console.log(err)
-
+       console.error(err)
+       const message = err?.response?.data?.message || err.message || "Login failed";
+       throw new Error(message);
     }
 }
 
@@ -35,7 +37,8 @@ export async function logout(){
         return response.data
     }
     catch(err){
-        console.log(err);
+        console.error(err);
+        throw err
     }
 }
 export async function getMe(){
@@ -44,6 +47,7 @@ export async function getMe(){
        return response.data
     }
     catch(err){
-        console.log(err)
+        console.error(err)
+        throw err
     }
 }

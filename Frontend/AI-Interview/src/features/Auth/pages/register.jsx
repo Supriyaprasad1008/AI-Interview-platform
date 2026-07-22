@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export default function RegisterPage() {
+  const { loading, handleRegister } = useAuth();
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your register logic here using the 'email' and 'password' states
-    console.log("Submitting register for:", email);
+    setError('');
+    try {
+      const success = await handleRegister({ username, email, password });
+      if (success) {
+        navigate('/');
+        return;
+      }
+      setError('Registration failed. Please try again.');
+    } catch (err) {
+      setError(err?.message || 'Registration failed. Please try again.');
+    }
   };
+
+  if (loading) {
+    return (<main className="min-h-screen flex items-center justify-center"><h1>Loading...</h1></main>);
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-foreground relative bg-background font-sans select-none overflow-hidden">
@@ -39,13 +57,21 @@ export default function RegisterPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6 font-serif">
+            {error && (
+              <div className="rounded-3xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-100 shadow-[0_10px_30px_-20px_rgba(244,63,94,0.65)]">
+                <p className="font-semibold text-rose-100 mb-1">Registration error</p>
+                <p>{error}</p>
+              </div>
+            )}
             {/* Name Field */}
             <div className="space-y-2">
               <label htmlFor="username" className="text-xs uppercase text-shadow-white tracking-wider text-muted/70 block">Username</label>
               <input 
                 type="text" 
                 id="username" 
-                name='username'
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter Username" 
                 className="w-full p-4 rounded-xl text-lg font-light bg-input-bg border border-input-border text-white placeholder:text-muted/50 focus:ring-2 focus:ring-emerald-shadow focus:ring-opacity-40 focus:border-emerald-shadow transition duration-200 outline-none"
                 required
@@ -85,8 +111,8 @@ export default function RegisterPage() {
             </div>
 
             {/* Primary Button */}
-            <button type="submit" className="w-full p-4 rounded-xl text-lg font-semibold bg-primary text-primary-foreground group flex items-center justify-center gap-3 transition duration-150 hover:bg-primary/90 hover:shadow-[0_0_25px_1px_rgba(16,185,129,0.7)] cursor-pointer">
-              Register
+            <button type="submit" disabled={loading} className="w-full p-4 rounded-xl text-lg font-semibold bg-primary text-primary-foreground group flex items-center justify-center gap-3 transition duration-150 hover:bg-primary/90 hover:shadow-[0_0_25px_1px_rgba(16,185,129,0.7)] disabled:cursor-not-allowed disabled:opacity-70">
+              {loading ? 'Registering...' : 'Register'}
               <svg className="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>

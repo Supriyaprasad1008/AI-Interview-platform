@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const { loading, handleLogin } = useAuth();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Call the auth hook's login handler
-    await handleLogin({ email, password });
+    setError('');
+    const success = await handleLogin({ email, password });
     console.log("Submitting login for:", email);
-    navigate('/')
+    if (success) {
+      navigate('/');
+    } else {
+      setError('Login failed. If you do not have an account yet, please register first.');
+    }
   };
 
   if (loading) {
@@ -49,6 +53,16 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+
+            {error && (
+              <div className="rounded-3xl border border-rose-500/40 bg-rose-500/10 p-5 text-sm text-rose-100 shadow-[0_10px_30px_-20px_rgba(244,63,94,0.65)]">
+                <p className="font-semibold text-rose-100 mb-1">Unable to sign in</p>
+                <p>{error}</p>
+                <p className="mt-3 text-white/80">
+                  Don&apos;t have an account yet? <Link className="font-semibold text-white underline" to="/register">Register now</Link>.
+                </p>
+              </div>
+            )}
 
             {/* Email Field */}
             <div className="space-y-2">
